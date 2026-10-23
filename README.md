@@ -8,7 +8,7 @@
     <a href="https://github.com/prontuno/prontuno-laravel/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/prontuno/prontuno-laravel/tests.yml?branch=main&label=Tests&style=flat-square"></a>
 </p>
 
-The official Laravel integration for sending email (including a `prontuno` mail transport), managing API resources, and receiving Prontuno webhooks.
+The official Laravel integration for the [Prontuno API](https://prontuno.com/api-reference/general/introduction/): sending email (including a `prontuno` mail transport), managing API resources, and receiving Prontuno webhooks.
 
 ## Requirements
 
