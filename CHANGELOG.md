@@ -1,7 +1,40 @@
 # Release Notes
 
-## [Unreleased](https://github.com/prontuno/prontuno-laravel/compare/v0.1.0...main)
+## [Unreleased](https://github.com/prontuno/prontuno-laravel/compare/v0.2.0...HEAD)
 
+## [v0.2.0](https://github.com/prontuno/prontuno-laravel/compare/v0.1.0...v0.2.0) - 2026-10-24
+
+Adds support for the [Prontuno API](https://prontuno.com/api-reference/general/introduction/) usage endpoint.
+
+### Added
+
+- `Prontuno::usage()->retrieve()` (or `$prontuno->usage()->retrieve()`) returns the team's sending capacity (`GET /v1/usage`):
+  - the subscription plan, with recipients used and remaining in the current billing period;
+  - the prepaid credit balance and when it expires;
+  - how many domains, shared teams, API keys, and SMTP credentials are in use against their limits.
+  
+- A PHPStan array shape for the response. `subscription` is `null` when the team has no plan, and unlimited values are `null`.
+- Uses the management key. A client with only a sending key throws `ConfigurationException` before any request is made.
+
+```php
+$usage = Prontuno::usage()->retrieve();
+echo $usage['credits']['balance'];
+
+```
+### Changed
+
+- The User-Agent is now `prontuno-laravel/0.2.0`.
+- The README links to the API reference, lists `usage:read` in the `mcp` key scopes, and adds `usage()->retrieve()` to the API reference table.
+
+### Upgrading
+
+There are no breaking changes. Because `^0.1` doesn't include 0.2 releases, update the version constraint:
+
+```bash
+composer require prontuno/prontuno-laravel:^0.2
+
+```
+**Full changelog:** https://github.com/prontuno/prontuno-laravel/compare/v0.1.0...v0.2.0
 
 ## [v0.1.0](https://github.com/prontuno/prontuno-laravel/releases/tag/v0.1.0) - 2026-10-23
 
