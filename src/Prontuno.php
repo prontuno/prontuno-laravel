@@ -17,6 +17,7 @@ use Prontuno\Laravel\Resources\Domains;
 use Prontuno\Laravel\Resources\Emails;
 use Prontuno\Laravel\Resources\SmtpCredentials;
 use Prontuno\Laravel\Resources\Suppressions;
+use Prontuno\Laravel\Resources\Usage;
 use Prontuno\Laravel\Resources\Webhooks;
 use Throwable;
 
@@ -34,7 +35,9 @@ class Prontuno
 
     private ?SmtpCredentials $smtpCredentials = null;
 
-    public const string VERSION = '0.1.0';
+    private ?Usage $usage = null;
+
+    public const string VERSION = '0.2.0';
 
     public const string DEFAULT_BASE_URL = 'https://api.prontuno.net/v1';
 
@@ -115,6 +118,11 @@ class Prontuno
     public function smtpCredentials(): SmtpCredentials
     {
         return $this->smtpCredentials ??= new SmtpCredentials($this);
+    }
+
+    public function usage(): Usage
+    {
+        return $this->usage ??= new Usage($this);
     }
 
     /**

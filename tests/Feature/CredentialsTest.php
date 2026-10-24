@@ -148,3 +148,23 @@ it('never retries requests that create secrets', function (Closure $call) {
     'smtp credential' => [fn (Prontuno $client) => $client->smtpCredentials()->create('CRM', PRONTUNO_DOMAIN_ID)],
     'password reset' => [fn (Prontuno $client) => $client->smtpCredentials()->resetPassword(PRONTUNO_SMTP_ID)],
 ]);
+
+it('retrieves usage', function () {
+    $usage = [
+        'subscription' => null,
+        'credits' => ['balance' => 25000, 'expires_at' => null],
+        'limits' => [
+            'domains' => ['used' => 2, 'limit' => 2],
+            'shared_teams' => ['used' => 0, 'limit' => 5],
+            'api_keys' => ['used' => 3, 'limit' => 10],
+            'smtp_credentials' => ['used' => 0, 'limit' => null],
+        ],
+    ];
+    Http::fake(['api.prontuno.test/v1/usage' => Http::response($usage)]);
+
+    expect(ProntunoFacade::usage()->retrieve())->toBe($usage)
+        ->and(app(Prontuno::class)->usage())->toBe(app(Prontuno::class)->usage());
+
+    Http::assertSent(fn (Request $request): bool => $request->method() === 'GET'
+        && $request->url() === 'https://api.prontuno.test/v1/usage');
+});

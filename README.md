@@ -60,7 +60,7 @@ PRONTUNO_WEBHOOK_SIGNING_SECRET=whsec_your_endpoint_secret
 PRONTUNO_WEBHOOK_TOLERANCE=300
 ```
 
-`PRONTUNO_APP_INFO` identifies your application in Prontuno's logs. It's sent after the package's own User-Agent, so requests go out as `prontuno-laravel/0.1.0 my-app/1.2.0`.
+`PRONTUNO_APP_INFO` identifies your application in Prontuno's logs. It's sent after the package's own User-Agent, so requests go out as `prontuno-laravel/0.2.0 my-app/1.2.0`.
 
 ## Laravel mail transport
 
@@ -302,7 +302,7 @@ Managing API keys requires a `management` API key. A key's permissions (scopes) 
 | Type | Scopes |
 | --- | --- |
 | `sending` | `email:send` for one verified domain (`domainId` required) |
-| `mcp` | `domains:*`, `emails:read`, `inbound:read`, `suppressions:*`, `webhooks:*`, plus `email:send` with `allowEmailSending: true` and a `domainId` |
+| `mcp` | `domains:*`, `emails:read`, `inbound:read`, `suppressions:*`, `usage:read`, `webhooks:*`, plus `email:send` with `allowEmailSending: true` and a `domainId` |
 | `management` | The `mcp` account scopes without `email:send`, plus `api_keys:*` and `smtp_credentials:*` |
 
 ```php
@@ -335,6 +335,20 @@ $prontuno->smtpCredentials()->revoke($credential['id']); // SMTP logins fail imm
 ```
 
 Creating API keys and SMTP credentials, and resetting passwords, are never retried automatically, so a timeout can't create a duplicate secret.
+
+## Usage
+
+```php
+$usage = $prontuno->usage()->retrieve();
+
+if ($usage['subscription']['is_active'] ?? false) {
+    echo $usage['subscription']['recipients_remaining']; // null on the unlimited plan
+}
+echo $usage['credits']['balance']; // prepaid credits; one covers one recipient
+echo $usage['limits']['domains']['limit']; // null when unlimited
+```
+
+Sends draw on the subscription allowance first while it's active, then on prepaid credits. `subscription` is `null` when the team has no plan, and `recipients_remaining` is `0` while the subscription isn't active.
 
 ## Receiving webhooks
 
@@ -500,6 +514,7 @@ Transport-level failures throw `Prontuno\Laravel\Exceptions\ConnectionException`
 | `smtpCredentials()->retrieve()` | `GET /v1/smtp-credentials/{id}` | `smtp_credentials:read` or `smtp_credentials:*` |
 | `smtpCredentials()->revoke()` | `DELETE /v1/smtp-credentials/{id}` | `smtp_credentials:*` |
 | `smtpCredentials()->resetPassword()` | `POST /v1/smtp-credentials/{id}/reset-password` | `smtp_credentials:*` |
+| `usage()->retrieve()` | `GET /v1/usage` | `usage:read` or `usage:*` |
 
 ## Testing application code
 
