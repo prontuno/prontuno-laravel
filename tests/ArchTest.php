@@ -23,5 +23,6 @@ arch('resource classes are final')
         'Prontuno\\Laravel\\Resources\\Webhooks',
         'Prontuno\\Laravel\\Resources\\ApiKeys',
         'Prontuno\\Laravel\\Resources\\SmtpCredentials',
+        'Prontuno\\Laravel\\Resources\\Usage',
     ])
     ->toBeFinal();

@@ -43,12 +43,14 @@ it('sends with the sending key and uses the management key for everything else',
     $client->emails()->sendBatch([PRONTUNO_TEST_EMAIL]);
     $client->emails()->list();
     $client->domains()->list();
+    $client->usage()->retrieve();
 
     expect(prontunoKeysUsed())->toBe([
         'POST /v1/emails Bearer pno_sk_send',
         'POST /v1/emails/batch Bearer pno_sk_send',
         'GET /v1/emails Bearer pno_sk_manage',
         'GET /v1/domains Bearer pno_sk_manage',
+        'GET /v1/usage Bearer pno_sk_manage',
     ]);
 });
 
