@@ -60,7 +60,7 @@ PRONTUNO_WEBHOOK_SIGNING_SECRET=whsec_your_endpoint_secret
 PRONTUNO_WEBHOOK_TOLERANCE=300
 ```
 
-`PRONTUNO_APP_INFO` identifies your application in Prontuno's logs. It's sent after the package's own User-Agent, so requests go out as `prontuno-laravel/0.1.0 my-app/1.2.0`.
+`PRONTUNO_APP_INFO` identifies your application in Prontuno's logs. It's sent after the package's own User-Agent, so requests go out as `prontuno-laravel/0.2.0 my-app/1.2.0`.
 
 ## Laravel mail transport
 
